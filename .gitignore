@@ -1,0 +1,6 @@
+node_modules
+.idea
+out_*
+target/
+project/project
+project/build.properties
