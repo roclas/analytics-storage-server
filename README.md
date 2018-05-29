@@ -1,6 +1,6 @@
 **What does this server do?**
 
-It basically creates a pull of threads that is capable of receiving many concurrent http requests in JSON format, and store them (so that they can be processed and analiced).
+It basically creates a pull of threads that is capable of receiving many concurrent http requests in JSON format, and store them (so that they can be processed and analyced).
 
 It has been built for demo purposes, so it stores them in a file system. Each actor writes to a diferent file.
 Akka HTTP is the perfect fit for this type of problem. It allows us to acomplish a very high throughput and a very high level of asynchrony very easily.
