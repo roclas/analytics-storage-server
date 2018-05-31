@@ -15,6 +15,7 @@ class Writer (tcpPort:Int) extends Actor {
 
     def receive = {
       case Work(x) ⇒
+        println(s"$x")
         out.println(s"$x")
         out.flush()
         sender ! s"processing ${x} in thread ${Thread.currentThread().getId}\n"
