@@ -49,7 +49,6 @@ object Server extends App {
 
 
   class WriterRouter extends Actor {
-    val writer = context.actorOf(Props[Writer])
     var router = {
       val routees = Vector.fill(nOfCores * nOfThreadsXCore) {
         val r = context.actorOf(Props[Writer])
