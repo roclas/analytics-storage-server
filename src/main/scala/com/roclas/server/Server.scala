@@ -39,6 +39,7 @@ object Server extends App {
   val analyticsPath = cnf.getString("my.app.analyticsPath")
   val trackPath = cnf.getString("my.app.trackPath")
   val server = cnf.getString("my.app.server")
+  val logstashTcpPort= cnf.getInt("my.app.logstashTcpPort")
   cnf = cnf.withValue(POOL_SIZE_CNF_STR, ConfigValueFactory.fromAnyRef(nOfThreadsXCore * nOfCores + extraThreads))
 
   implicit val system = ActorSystem("analytics-storage-system", cnf)
@@ -49,10 +50,9 @@ object Server extends App {
 
 
   class WriterRouter extends Actor {
-    val writer = context.actorOf(Props[Writer])
     var router = {
       val routees = Vector.fill(nOfCores * nOfThreadsXCore) {
-        val r = context.actorOf(Props[Writer])
+        val r= context.actorOf(Props(new Writer(logstashTcpPort)))
         context watch r
         ActorRefRoutee(r)
       }
@@ -63,7 +63,7 @@ object Server extends App {
       case w: Work ⇒ router.route(w, sender())
       case Terminated(a) ⇒
         router = router.removeRoutee(a)
-        val r = context.actorOf(Props[Writer])
+        val r= context.actorOf(Props(new Writer(logstashTcpPort)))
         context watch r
         router = router.addRoutee(r)
     }

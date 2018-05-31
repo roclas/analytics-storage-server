@@ -2,7 +2,7 @@
 
 It basically creates a pull of threads that is capable of receiving many concurrent http requests in JSON format, and store them (so that they can be processed and analyced).
 
-It has been built for demo purposes, so it stores them in a file system. Each actor writes to a diferent file.
+It has been built for demo purposes, so it sends them to a socket. 
 Akka HTTP is the perfect fit for this type of problem. It allows us to acomplish a very high throughput and a very high level of asynchrony very easily.
 
 This server would be intended to be part of a mini omniture, piwik or google analytics system, where by adding javascript to our sites, many concurrent Ajax requests (with information about our clients' usage) will be sent against our server, that will be able to process and store them all, up to a very high number of requests per second.
@@ -47,7 +47,7 @@ The two most important files that contain all the logic are:
 
 *Server.scala*: which deals with concurrency and actors (you shouldn't need to modify anything in it)
 
-*Writer.scala*: which is the worker class (actor) that actually writes the data. It saves it to the filesystem ( one actor per file to obtain maximum concurrency ) but it can be changed to write it to Cassandra, to Akka Streams, to Kafka, or to another Database (just to name ideas). It would also be left in the filesystem (so that it can be processed by Spark or Hadoop or similar in the future).
+*Writer.scala*: which is the worker class (actor) that actually writes the data. It writes them to simple socket, but it can be changed to write it to Cassandra, to Akka Streams, to Kafka, or to another Database (just to name ideas). 
 
 If you want to modify the configuration, just get the *application.conf* file, and modify the parameters in it. You can use an external application.conf file like this:
 
